@@ -23,7 +23,8 @@ router.post('/chat', async (req, res) => {
       status: 'success',
       message: agentResult.answer,
       products: agentResult.products || [],
-      confidence: agentResult.confidence
+      confidence: agentResult.confidence,
+      uiComponent: agentResult.uiComponent || null
     });
   } catch (err) {
     console.error('AI Chat Error:', err);

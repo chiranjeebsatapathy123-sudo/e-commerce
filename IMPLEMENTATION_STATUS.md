@@ -111,4 +111,10 @@
 - [x] Spatial Commerce 3D/AR Viewer (`model-viewer`)
 - [x] Autonomous Marketing Cart Abandonment Worker
 
+## Phase 16: The Extensible Ecosystem
+- [x] Dockerization & `docker-compose.yml` (Server, Client, Redis)
+- [x] CI/CD Pipeline (GitHub Actions)
+- [x] Creator Studio & Affiliate Collections API
+- [x] Generative AI UI Components (`DistanceCalculator` injection)
+
 

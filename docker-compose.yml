@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+      - DB_STORAGE=./data/database.sqlite
+      # Add other env vars here (e.g. STRIPE_SECRET_KEY, OPENAI_API_KEY)
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - redis
+    networks:
+      - ecommerce_network
+
+  client:
+    build:
+      context: ./client
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    networks:
+      - ecommerce_network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ecommerce_network
+
+networks:
+  ecommerce_network:
+    driver: bridge
+
+volumes:
+  redis_data:

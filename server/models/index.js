@@ -21,6 +21,7 @@ const AIAction = require('./AIAction');
 const ShoppingRadarItem = require('./ShoppingRadarItem');
 const ShoppingDecisionWorkspace = require('./ShoppingDecisionWorkspace');
 const ProductMultimodalProfile = require('./ProductMultimodalProfile');
+const Collection = require('./Collection');
 
 // User and Order
 User.hasMany(Order, { onDelete: 'CASCADE' });
@@ -98,5 +99,6 @@ module.exports = {
   AIAction,
   ShoppingRadarItem,
   ShoppingDecisionWorkspace,
-  ProductMultimodalProfile
+  ProductMultimodalProfile,
+  Collection
 };

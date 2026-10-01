@@ -138,7 +138,8 @@ const AiCopilot = ({ addToCart, toggleWishlist, wishlist }) => {
             role: 'assistant', 
             content: data.message,
             products: data.products || [],
-            confidence: data.confidence
+            confidence: data.confidence,
+            uiComponent: data.uiComponent // Generative UI injection
           }
         ]);
       } else {
@@ -206,6 +207,27 @@ const AiCopilot = ({ addToCart, toggleWishlist, wishlist }) => {
     );
   };
 
+  const renderDynamicUI = (uiType, props) => {
+    if (!uiType) return null;
+
+    if (uiType === 'DistanceCalculator') {
+      return (
+        <div className="generative-ui-component" style={{ marginTop: '16px', background: 'var(--panel)', padding: '16px', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
+          <h4 style={{ marginBottom: '12px' }}>TV Viewing Distance Calculator</h4>
+          <input type="range" min="30" max="100" defaultValue="55" onChange={(e) => {
+            const size = e.target.value;
+            const distance = (size * 1.2 / 12).toFixed(1);
+            document.getElementById('calc-result').innerText = `Recommended distance for ${size}" TV is ~${distance} ft`;
+          }} style={{ width: '100%', marginBottom: '12px' }} />
+          <p id="calc-result" style={{ fontWeight: 'bold', color: 'var(--primary)' }}>Recommended distance for 55" TV is ~5.5 ft</p>
+        </div>
+      );
+    }
+    
+    // Add more generative components here...
+    return null;
+  };
+
   return (
     <div className="ai-copilot-page container animate-fade-in" style={{ padding: '24px 12px' }}>
       <div className="ai-chat-container glass-panel">
@@ -245,6 +267,8 @@ const AiCopilot = ({ addToCart, toggleWishlist, wishlist }) => {
                 <div style={{ lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
                   {msg.content}
                 </div>
+                
+                {msg.role === 'assistant' && msg.uiComponent && renderDynamicUI(msg.uiComponent.type, msg.uiComponent.props)}
                 
                 {msg.role === 'assistant' && msg.confidence !== undefined && (
                   <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between' }}>

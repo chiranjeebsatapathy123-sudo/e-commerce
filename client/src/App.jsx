@@ -15,6 +15,7 @@ import Compare from './pages/Compare';
 import PersonalizationCenter from './pages/PersonalizationCenter';
 import DecisionWorkspace from './pages/DecisionWorkspace';
 import ShoppingRadar from './pages/ShoppingRadar';
+import CreatorStudio from './pages/CreatorStudio';
 import BackgroundEngine from './components/background/BackgroundEngine';
 import SparkAIFab from './components/SparkAIFab';
 import CommandPalette from './components/CommandPalette';
@@ -247,6 +248,7 @@ function App() {
             <Route path="/personalization" element={<PersonalizationCenter userInfo={userInfo} />} />
             <Route path="/workspace" element={<DecisionWorkspace userInfo={userInfo} addToCart={addToCart} />} />
             <Route path="/radar" element={<ShoppingRadar userInfo={userInfo} />} />
+            <Route path="/creator" element={<CreatorStudio userInfo={userInfo} />} />
           </Routes>
         </main>
         <Footer />

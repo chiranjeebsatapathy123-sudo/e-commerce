@@ -22,6 +22,7 @@ const ShoppingAgent = {
       User Request: "${userRequest}"
       
       If you need to search for products, set toolToCall to 'searchProducts'.
+      If the user is asking about TV sizes, viewing distances, or how far to sit, include "uiComponent": { "type": "DistanceCalculator", "props": {} } in your JSON.
       If you just want to answer generally, leave toolToCall empty.
     `;
     
@@ -36,6 +37,7 @@ const ShoppingAgent = {
     const result = {
        answer: parsed.answer,
        confidence: parsed.confidence || 0.5,
+       uiComponent: parsed.uiComponent || null,
        toolsCalled: []
     };
 
