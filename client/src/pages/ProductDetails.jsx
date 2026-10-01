@@ -13,6 +13,7 @@ const ProductDetails = ({ addToCart, wishlist, toggleWishlist, userInfo }) => {
   const [activeImage, setActiveImage] = useState('');
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isLensOpen, setIsLensOpen] = useState(false);
+  const [is3DMode, setIs3DMode] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -122,10 +123,32 @@ const ProductDetails = ({ addToCart, wishlist, toggleWishlist, userInfo }) => {
 
       <div className="product-details-grid">
         <div className="product-gallery">
-          <div className="main-image-wrapper glass-panel" style={{ position: 'relative', cursor: 'zoom-in' }} onClick={() => setIsGalleryOpen(true)}>
-            <img src={activeImage} alt={product.name} className="main-image" />
-            <button className="btn-icon-only" style={{ position: 'absolute', top: '16px', right: '16px', background: 'var(--bg)', border: 'none', color: 'var(--text-muted)' }}>
-              <Maximize2 size={20} />
+          <div className="main-image-wrapper glass-panel" style={{ position: 'relative', height: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {is3DMode ? (
+              <model-viewer
+                src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+                ios-src="https://modelviewer.dev/shared-assets/models/Astronaut.usdz"
+                alt="A 3D model of an astronaut"
+                ar
+                auto-rotate
+                camera-controls
+                style={{ width: '100%', height: '100%' }}
+              ></model-viewer>
+            ) : (
+              <>
+                <img src={activeImage} alt={product.name} className="main-image" style={{ maxHeight: '100%', objectFit: 'contain' }} onClick={() => setIsGalleryOpen(true)} />
+                <button className="btn-icon-only" onClick={() => setIsGalleryOpen(true)} style={{ position: 'absolute', top: '16px', right: '16px', background: 'var(--bg)', border: 'none', color: 'var(--text-muted)' }}>
+                  <Maximize2 size={20} />
+                </button>
+              </>
+            )}
+            
+            <button 
+              onClick={() => setIs3DMode(!is3DMode)}
+              className="btn btn-secondary btn-sm" 
+              style={{ position: 'absolute', bottom: '16px', right: '16px', gap: '8px', zIndex: 10 }}
+            >
+              <Sparkles size={14} /> {is3DMode ? 'Close 3D' : 'View in 3D / AR'}
             </button>
           </div>
           <div className="thumbnails-grid">

@@ -19,7 +19,11 @@ import BackgroundEngine from './components/background/BackgroundEngine';
 import SparkAIFab from './components/SparkAIFab';
 import CommandPalette from './components/CommandPalette';
 import { ToastProvider } from './components/ToastProvider';
+import { io } from 'socket.io-client';
 import './index.css';
+
+// Initialize socket connection outside component so it doesn't reconnect on every render
+const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000');
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -43,6 +47,19 @@ function App() {
 
   const [searchKeyword, setSearchKeyword] = useState('');
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [liveActivity, setLiveActivity] = useState(null);
+
+  useEffect(() => {
+    socket.on('live_activity', (data) => {
+      setLiveActivity(data);
+      // clear after 5s
+      setTimeout(() => setLiveActivity(null), 5000);
+    });
+
+    return () => {
+      socket.off('live_activity');
+    };
+  }, []);
 
   useEffect(() => {
     const handleOpen = () => setIsCommandPaletteOpen(true);
@@ -129,6 +146,18 @@ function App() {
           toggleTheme={toggleTheme}
           onSearch={setSearchKeyword}
         />
+        
+        {liveActivity && (
+          <div className="live-activity-ticker animate-fade-in" style={{
+            background: 'var(--accent)', color: 'white', padding: '8px 16px', 
+            textAlign: 'center', fontSize: '0.85rem', fontWeight: 500,
+            display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px'
+          }}>
+            <span className="pulse-dot" style={{ background: 'white', width: '8px', height: '8px', borderRadius: '50%', display: 'inline-block', animation: 'pulse 1.5s infinite' }}></span>
+            {liveActivity}
+          </div>
+        )}
+
         <main className="main-content-area">
           <Routes>
             <Route

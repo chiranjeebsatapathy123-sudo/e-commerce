@@ -22,6 +22,9 @@ const AdminDashboard = ({ userInfo }) => {
   const [reviewIntelligenceData, setReviewIntelligenceData] = useState(null);
   const [aiControlData, setAiControlData] = useState(null);
   const [pendingActions, setPendingActions] = useState([]);
+  const [incidents, setIncidents] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
+  const [experiments, setExperiments] = useState([]);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
@@ -90,6 +93,15 @@ const AdminDashboard = ({ userInfo }) => {
       } else if (activeTab === 'ai-approval') {
         const { data } = await api.get('/commerce-brain/actions/pending');
         setPendingActions(data);
+      } else if (activeTab === 'opportunities') {
+        const { data } = await api.get('/admin/opportunities');
+        setOpportunities(data);
+      } else if (activeTab === 'incidents') {
+        const { data } = await api.get('/admin/ai/incidents');
+        setIncidents(data.incidents || []);
+      } else if (activeTab === 'experiments') {
+        const { data } = await api.get('/admin/ai/experiments');
+        setExperiments(data.experiments || []);
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to retrieve admin details');
@@ -251,6 +263,24 @@ const AdminDashboard = ({ userInfo }) => {
           className={`admin-tab-btn ${activeTab === 'ai-approval' ? 'active' : ''}`}
         >
           <ShieldAlert size={18} /> AI Approval
+        </button>
+        <button 
+          onClick={() => setActiveTab('opportunities')} 
+          className={`admin-tab-btn ${activeTab === 'opportunities' ? 'active' : ''}`}
+        >
+          <CircleDollarSign size={18} /> Opportunities
+        </button>
+        <button 
+          onClick={() => setActiveTab('incidents')} 
+          className={`admin-tab-btn ${activeTab === 'incidents' ? 'active' : ''}`}
+        >
+          <AlertTriangle size={18} /> Incidents
+        </button>
+        <button 
+          onClick={() => setActiveTab('experiments')} 
+          className={`admin-tab-btn ${activeTab === 'experiments' ? 'active' : ''}`}
+        >
+          <Edit3 size={18} /> Experiments
         </button>
       </div>
 
@@ -834,6 +864,67 @@ const AdminDashboard = ({ userInfo }) => {
               </table>
             </div>
           )}
+
+          {activeTab === 'opportunities' && (
+            <div className="opportunities-view glass-panel">
+              <h3 className="text-h3" style={{ marginBottom: '24px' }}>AI Business Opportunities</h3>
+              {opportunities.length === 0 ? (
+                <p className="no-data-hint">No actionable opportunities detected at this time.</p>
+              ) : (
+                <div style={{ display: 'grid', gap: '16px' }}>
+                  {opportunities.map((opp) => (
+                    <div key={opp.id} className="opportunity-card glass-panel" style={{ borderLeft: '4px solid var(--accent)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                        <strong style={{ fontSize: '1.1rem', color: 'var(--accent)' }}>{opp.type}</strong>
+                        <span className="badge badge-primary">Confidence: {(opp.confidence * 100).toFixed(0)}%</span>
+                      </div>
+                      <p><strong>Evidence:</strong> {opp.evidence}</p>
+                      <p><strong>Impact Estimate:</strong> {opp.impactEstimate}</p>
+                      <p><strong>Recommendation:</strong> {opp.recommendedAction}</p>
+                      <button className="btn btn-primary btn-sm" style={{ marginTop: '12px' }}>Review Action</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'incidents' && (
+            <div className="incidents-view glass-panel">
+              <h3 className="text-h3" style={{ marginBottom: '24px' }}>AI Incident Center</h3>
+              {incidents.length === 0 ? (
+                <p className="no-data-hint">No AI incidents or failures logged.</p>
+              ) : (
+                <div style={{ display: 'grid', gap: '16px' }}>
+                  {incidents.map((inc) => (
+                    <div key={inc.id} className="incident-card glass-panel" style={{ borderLeft: '4px solid var(--danger)' }}>
+                      <strong>{inc.type}</strong>
+                      <p>{inc.description}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === 'experiments' && (
+            <div className="experiments-view glass-panel">
+              <h3 className="text-h3" style={{ marginBottom: '24px' }}>Experimentation Studio</h3>
+              {experiments.length === 0 ? (
+                <p className="no-data-hint">No active A/B tests or experiments running.</p>
+              ) : (
+                <div style={{ display: 'grid', gap: '16px' }}>
+                  {experiments.map((exp) => (
+                    <div key={exp.id} className="experiment-card glass-panel">
+                      <strong>{exp.name}</strong>
+                      <p>Status: {exp.status}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
         </div>
       )}
 

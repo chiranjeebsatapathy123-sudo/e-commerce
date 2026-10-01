@@ -1,4 +1,6 @@
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const sequelize = require('./config/db');
@@ -8,7 +10,31 @@ const { formatResponse } = require('./middleware/responseFormatter');
 dotenv.config();
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // allow all for dev
+    methods: ["GET", "POST"]
+  }
+});
 
+// Expose io to routes if needed
+app.set('io', io);
+
+// Basic socket logic
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+  
+  // Real-time activity broadcast
+  socket.on('activity', (data) => {
+    // broadcast to everyone except sender
+    socket.broadcast.emit('live_activity', data); 
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
 app.use(helmetMiddleware);
 app.use(corsMiddleware);
 app.use(generalLimiter);
@@ -62,6 +88,10 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('Database connected successfully.');
     
+    // Start Autonomous Marketing Engine
+    const CartAbandonmentWorker = require('./services/intelligence/cartAbandonmentWorker');
+    CartAbandonmentWorker.start(60);
+    
     if (process.env.NODE_ENV === 'development') {
       await sequelize.sync();
       console.log('Database synchronized (development mode).');
@@ -69,7 +99,7 @@ const startServer = async () => {
       console.log('Database synchronization skipped. Ensure migrations are run.');
     }
     
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server is running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
     });
   } catch (error) {

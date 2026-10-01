@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import { CreditCard, Truck, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react';
+import { io } from 'socket.io-client';
+
+const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000');
 
 const Checkout = ({ userInfo, cart, clearCart }) => {
   const navigate = useNavigate();
@@ -61,6 +64,12 @@ const Checkout = ({ userInfo, cart, clearCart }) => {
         totalPrice: total
       });
       setPlacedOrder(data);
+      
+      // Emit live activity
+      if (orderItems.length > 0) {
+        socket.emit('activity', `Someone in ${city || 'your area'} just bought ${orderItems[0].name}!`);
+      }
+
       clearCart();
       setStep(3);
     } catch (err) {

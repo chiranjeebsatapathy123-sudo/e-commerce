@@ -19,10 +19,65 @@ const AiCopilot = ({ addToCart, toggleWishlist, wishlist }) => {
   
   // Real products data loaded dynamically if the AI returns product IDs
   const [productCache, setProductCache] = useState({});
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, loading]);
+
+  useEffect(() => {
+    // Initialize Speech Recognition if supported
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = true;
+
+      recognitionRef.current.onresult = (event) => {
+        let interimTranscript = '';
+        let finalTranscript = '';
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            finalTranscript += event.results[i][0].transcript;
+          } else {
+            interimTranscript += event.results[i][0].transcript;
+          }
+        }
+        
+        if (finalTranscript) {
+          setInput(prev => prev + ' ' + finalTranscript.trim());
+        } else if (interimTranscript) {
+          // Could display interim somewhere if we want
+        }
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = (event) => {
+        console.error('Speech recognition error', event.error);
+        setIsListening(false);
+      };
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert("Your browser does not support voice recognition.");
+      return;
+    }
+    
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current.start();
+      setIsListening(true);
+    }
+  };
 
   const fetchProductsDetails = async (productIds) => {
     const newProducts = {};
@@ -235,8 +290,14 @@ const AiCopilot = ({ addToCart, toggleWishlist, wishlist }) => {
         {/* Input Area */}
         <div className="ai-chat-input-area" style={{ padding: '16px 24px', borderTop: '1px solid var(--border)', background: 'var(--panel-alt)', borderBottomLeftRadius: 'var(--radius-lg)', borderBottomRightRadius: 'var(--radius-lg)' }}>
           <form onSubmit={handleSend} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-            <button type="button" className="ai-mic-btn text-muted" title="Voice coming soon" disabled style={{ background: 'none', border: 'none', cursor: 'not-allowed' }}>
-              <Mic size={24} />
+            <button 
+              type="button" 
+              onClick={toggleListening}
+              className={`ai-mic-btn ${isListening ? 'listening active' : 'text-muted'}`} 
+              title={isListening ? "Stop listening" : "Start voice search"} 
+              style={{ background: isListening ? 'rgba(var(--primary-hsl), 0.1)' : 'none', border: 'none', cursor: 'pointer', color: isListening ? 'var(--primary)' : 'inherit', padding: '8px', borderRadius: '50%' }}
+            >
+              {isListening ? <StopCircle size={24} /> : <Mic size={24} />}
             </button>
             <input
               type="text"
