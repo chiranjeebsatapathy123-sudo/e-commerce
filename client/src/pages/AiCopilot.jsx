@@ -82,7 +82,8 @@ const AiCopilot = ({ addToCart, toggleWishlist, wishlist }) => {
             id: Date.now().toString(), 
             role: 'assistant', 
             content: data.message,
-            products: data.products || []
+            products: data.products || [],
+            confidence: data.confidence
           }
         ]);
       } else {
@@ -189,6 +190,16 @@ const AiCopilot = ({ addToCart, toggleWishlist, wishlist }) => {
                 <div style={{ lineHeight: 1.5, whiteSpace: 'pre-wrap' }}>
                   {msg.content}
                 </div>
+                
+                {msg.role === 'assistant' && msg.confidence !== undefined && (
+                  <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid var(--border)', fontSize: '0.8rem', color: 'var(--text-muted)', display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <CheckCircle2 size={12} className={msg.confidence > 0.7 ? "text-success" : "text-warning"} />
+                      {msg.confidence > 0.7 ? "High Confidence" : "Limited Information"}
+                    </span>
+                    <span>AI-Generated Response</span>
+                  </div>
+                )}
               </div>
               
               {/* Product Cards Attachment */}

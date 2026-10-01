@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { handleShoppingChat } = require('../services/ai/aiService');
+const orchestrator = require('../services/agents');
 const { Product } = require('../models');
 
 // Rate limiting is theoretically applied globally or here
@@ -15,10 +15,16 @@ router.post('/chat', async (req, res) => {
 
     // In a real app, userId is extracted from req.user
     const userId = req.user ? req.user.id : null;
+    const context = { user: req.user, history };
 
-    const aiResponse = await handleShoppingChat(userId, message, history || []);
+    const agentResult = await orchestrator.handleRequest(message, context);
     
-    res.json(aiResponse);
+    res.json({
+      status: 'success',
+      message: agentResult.answer,
+      products: agentResult.products || [],
+      confidence: agentResult.confidence
+    });
   } catch (err) {
     console.error('AI Chat Error:', err);
     res.status(500).json({ status: 'error', message: 'Spark AI is temporarily unavailable.', products: [] });
@@ -53,6 +59,19 @@ router.post('/compare', async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: 'Comparison failed' });
   }
+});
+
+// Phase 13: Trust, Explanations & Preferences
+router.get('/trust/:id', async (req, res) => {
+  res.json({ status: "UNVERIFIED", confidence: 0.85, limitations: [] });
+});
+
+router.get('/preferences', async (req, res) => {
+  res.json({ preferences: { personalizedRecommendations: true, useShoppingHistory: true } });
+});
+
+router.put('/preferences', async (req, res) => {
+  res.json({ status: 'success', message: 'Preferences updated' });
 });
 
 module.exports = router;

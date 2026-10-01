@@ -1,5 +1,7 @@
 // server/services/ai/aiProvider.js
-const axios = require('axios'); // We can use axios if it's installed, or fetch
+const axios = require('axios');
+const modelRouter = require('./modelRouter');
+const costIntel = require('./costIntelligence');
 
 const getConfig = () => ({
   provider: process.env.AI_PROVIDER || 'mock',
@@ -44,6 +46,13 @@ const generateText = async (messages, systemPrompt = '') => {
       }
     );
 
+    const routedModel = modelRouter.route({ type: 'chat' });
+    
+    // Simulate token counts for cost tracking
+    const inputTokens = JSON.stringify(messages).length / 4;
+    const outputTokens = (response.data.choices[0].message.content || '').length / 4;
+    costIntel.track(routedModel.id, 'generateText', inputTokens, outputTokens, routedModel.costPer1k);
+
     return response.data.choices[0].message.content;
   } catch (err) {
     console.error('[AI Provider Error]:', err.message);
@@ -85,7 +94,15 @@ const generateStructured = async (messages, schema, systemPrompt = '') => {
       }
     );
 
+    const routedModel = modelRouter.route({ type: 'structured' });
+
     const content = response.data.choices[0].message.content;
+
+    // Simulate token counts for cost tracking
+    const inputTokens = JSON.stringify(messages).length / 4;
+    const outputTokens = content.length / 4;
+    costIntel.track(routedModel.id, 'generateStructured', inputTokens, outputTokens, routedModel.costPer1k);
+
     return JSON.parse(content);
   } catch (err) {
     console.error('[AI Provider Error - Structured]:', err.message);

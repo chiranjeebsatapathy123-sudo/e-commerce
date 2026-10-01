@@ -1,0 +1,138 @@
+/* ==========================================================================
+   THEMES (Light & Dark)
+   ========================================================================== */
+
+:root,
+[data-theme="light"] {
+  /* Colors */
+  --color-primary: hsl(var(--primary-hsl));
+  --color-primary-hover: hsl(250, 84%, 44%);
+  --color-secondary: hsl(var(--secondary-hsl));
+  
+  --color-bg: hsl(var(--bg-hsl));
+  --color-surface: hsl(var(--surface-hsl));
+  --color-surface-elevated: hsl(var(--surface-elevated-hsl));
+  
+  /* Glass variant */
+  --color-surface-glass: rgba(255, 255, 255, 0.7);
+  --color-surface-glass-soft: rgba(255, 255, 255, 0.4);
+
+  --color-text-primary: hsl(var(--text-primary-hsl));
+  --color-text-secondary: hsl(var(--text-secondary-hsl));
+  --color-text-muted: hsl(var(--text-muted-hsl));
+  
+  --color-border: hsl(var(--border-hsl));
+  --color-border-subtle: hsl(220, 13%, 95%);
+  
+  --color-accent: hsl(var(--accent-hsl));
+  --color-accent-hover: hsl(12, 95%, 49%);
+  
+  --color-success: hsl(var(--success-hsl));
+  --color-success-bg: hsl(142, 72%, 95%);
+  --color-warning: hsl(var(--warning-hsl));
+  --color-warning-bg: hsl(38, 92%, 95%);
+  --color-danger: hsl(var(--danger-hsl));
+  --color-danger-bg: hsl(348, 83%, 95%);
+
+  --shadow-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] {
+  /* Dark Theme Adjustments */
+  --primary-hsl: 250, 95%, 65%;
+  --secondary-hsl: 250, 30%, 12%;
+  
+  --bg-hsl: 224, 71%, 4%;
+  --surface-hsl: 222, 47%, 9%;
+  --surface-elevated-hsl: 222, 40%, 14%;
+  
+  --text-primary-hsl: 210, 40%, 98%;
+  --text-secondary-hsl: 215, 20%, 75%;
+  --text-muted-hsl: 215, 20%, 55%;
+  
+  --border-hsl: 217, 33%, 17%;
+  
+  /* Semantic adjustments for dark mode */
+  --success-hsl: 142, 69%, 58%;
+  --danger-hsl: 348, 83%, 65%;
+
+  /* Color Definitions for Dark Mode */
+  --color-primary: hsl(var(--primary-hsl));
+  --color-primary-hover: hsl(250, 95%, 75%);
+  --color-secondary: hsl(var(--secondary-hsl));
+  
+  --color-bg: hsl(var(--bg-hsl));
+  --color-surface: hsl(var(--surface-hsl));
+  --color-surface-elevated: hsl(var(--surface-elevated-hsl));
+  
+  --color-surface-glass: rgba(15, 18, 25, 0.7);
+  --color-surface-glass-soft: rgba(15, 18, 25, 0.4);
+
+  --color-text-primary: hsl(var(--text-primary-hsl));
+  --color-text-secondary: hsl(var(--text-secondary-hsl));
+  --color-text-muted: hsl(var(--text-muted-hsl));
+  
+  --color-border: hsl(var(--border-hsl));
+  --color-border-subtle: hsl(217, 33%, 12%);
+  
+  --color-accent: hsl(var(--accent-hsl));
+  --color-accent-hover: hsl(12, 95%, 69%);
+  
+  --color-success: hsl(var(--success-hsl));
+  --color-success-bg: rgba(74, 222, 128, 0.1);
+  --color-warning: hsl(var(--warning-hsl));
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-danger: hsl(var(--danger-hsl));
+  --color-danger-bg: rgba(244, 63, 94, 0.1);
+
+  /* Adjust shadows for dark mode */
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 2px 4px var(--shadow-color);
+  --shadow-md: 0 8px 16px var(--shadow-color);
+  --shadow-lg: 0 16px 32px var(--shadow-color);
+  --shadow-floating: 0 24px 48px rgba(0,0,0,0.7);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* Same as [data-theme="dark"] */
+    --primary-hsl: 250, 95%, 65%;
+    --secondary-hsl: 250, 30%, 12%;
+    --bg-hsl: 224, 71%, 4%;
+    --surface-hsl: 222, 47%, 9%;
+    --surface-elevated-hsl: 222, 40%, 14%;
+    --text-primary-hsl: 210, 40%, 98%;
+    --text-secondary-hsl: 215, 20%, 75%;
+    --text-muted-hsl: 215, 20%, 55%;
+    --border-hsl: 217, 33%, 17%;
+    
+    --color-primary: hsl(var(--primary-hsl));
+    --color-primary-hover: hsl(250, 95%, 75%);
+    --color-secondary: hsl(var(--secondary-hsl));
+    --color-bg: hsl(var(--bg-hsl));
+    --color-surface: hsl(var(--surface-hsl));
+    --color-surface-elevated: hsl(var(--surface-elevated-hsl));
+    --color-surface-glass: rgba(15, 18, 25, 0.7);
+    --color-surface-glass-soft: rgba(15, 18, 25, 0.4);
+    --color-text-primary: hsl(var(--text-primary-hsl));
+    --color-text-secondary: hsl(var(--text-secondary-hsl));
+    --color-text-muted: hsl(var(--text-muted-hsl));
+    --color-border: hsl(var(--border-hsl));
+    --color-border-subtle: hsl(217, 33%, 12%);
+    --color-accent: hsl(var(--accent-hsl));
+    --color-accent-hover: hsl(12, 95%, 69%);
+    
+    --color-success: hsl(var(--success-hsl));
+    --color-success-bg: rgba(74, 222, 128, 0.1);
+    --color-warning: hsl(var(--warning-hsl));
+    --color-warning-bg: rgba(245, 158, 11, 0.1);
+    --color-danger: hsl(var(--danger-hsl));
+    --color-danger-bg: rgba(244, 63, 94, 0.1);
+    
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --shadow-sm: 0 2px 4px var(--shadow-color);
+    --shadow-md: 0 8px 16px var(--shadow-color);
+    --shadow-lg: 0 16px 32px var(--shadow-color);
+    --shadow-floating: 0 24px 48px rgba(0,0,0,0.7);
+  }
+}

@@ -10,6 +10,17 @@ const ProductEmbedding = require('./ProductEmbedding');
 const SearchQuery = require('./SearchQuery');
 const UserInteraction = require('./UserInteraction');
 const ProductReviewAnalysis = require('./ProductReviewAnalysis');
+const BusinessAlert = require('./BusinessAlert');
+const AdminAuditLog = require('./AdminAuditLog');
+
+// Phase 10 Models
+const UserExperiencePreference = require('./UserExperiencePreference');
+const CommerceEvent = require('./CommerceEvent');
+const ProductRelationship = require('./ProductRelationship');
+const AIAction = require('./AIAction');
+const ShoppingRadarItem = require('./ShoppingRadarItem');
+const ShoppingDecisionWorkspace = require('./ShoppingDecisionWorkspace');
+const ProductMultimodalProfile = require('./ProductMultimodalProfile');
 
 // User and Order
 User.hasMany(Order, { onDelete: 'CASCADE' });
@@ -78,5 +89,14 @@ module.exports = {
   ProductEmbedding,
   SearchQuery,
   UserInteraction,
-  ProductReviewAnalysis
+  ProductReviewAnalysis,
+  BusinessAlert,
+  AdminAuditLog,
+  UserExperiencePreference,
+  CommerceEvent,
+  ProductRelationship,
+  AIAction,
+  ShoppingRadarItem,
+  ShoppingDecisionWorkspace,
+  ProductMultimodalProfile
 };

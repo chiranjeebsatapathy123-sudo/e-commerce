@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Search, ShoppingCart, Heart, User, Moon, Sun, LogOut, LayoutDashboard, Sparkles, Home, Mic, Camera } from 'lucide-react';
+import { Search, ShoppingCart, Heart, User, Moon, Sun, LogOut, LayoutDashboard, Sparkles, Home, Mic, Camera, Settings, Activity, FolderKanban } from 'lucide-react';
 import api from '../services/api';
 import ImageSearchModal from './ImageSearchModal';
 
@@ -79,15 +79,19 @@ const Navbar = ({ userInfo, logout, cart, wishlist, theme, toggleTheme, onSearch
   const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   const isActive = (path) => location.pathname === path ? 'active' : '';
+  
+  const isCheckout = location.pathname.includes('/checkout');
+  const isWorkspace = location.pathname.includes('/workspace') || location.pathname.includes('/ai');
 
   return (
     <>
-      <header className="navbar-header glass-panel">
+      <header className={`navbar-header glass-panel ${isCheckout ? 'minimal' : ''}`}>
         <div className="container navbar-container">
           <Link to="/" className="navbar-logo" onClick={() => { setKeyword(''); onSearch(''); }}>
             <span className="logo-spark">✨</span> SparkCart
           </Link>
 
+          {!isCheckout && !isWorkspace && (
           <div className="navbar-search-container" style={{ position: 'relative', flex: 1, maxWidth: '400px' }}>
             <form onSubmit={handleSearchSubmit} className="navbar-search" style={{ width: '100%', maxWidth: '100%', display: 'flex', alignItems: 'center', background: 'var(--panel)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', padding: '0 8px' }}>
               <input
@@ -158,7 +162,9 @@ const Navbar = ({ userInfo, logout, cart, wishlist, theme, toggleTheme, onSearch
               )}
             </div>
           </div>
+          )}
 
+          {!isCheckout && (
           <nav className="navbar-links">
             <button className="btn btn-secondary ai-btn" onClick={() => navigate('/ai')}>
               <Sparkles size={16} className="text-accent" /> Ask Spark AI
@@ -180,18 +186,34 @@ const Navbar = ({ userInfo, logout, cart, wishlist, theme, toggleTheme, onSearch
 
             {userInfo ? (
               <div className="user-menu-wrapper desktop-only">
-                <Link to="/orders" className="nav-text-link">
-                  <User size={18} />
-                  <span className="nav-user-name">{userInfo.name.split(' ')[0]}</span>
-                </Link>
-                {(userInfo.role === 'admin' || userInfo.role === 'Super Admin') && (
-                  <Link to="/admin" className="nav-admin-link" title="Admin Dashboard">
-                    <LayoutDashboard size={18} />
-                  </Link>
-                )}
-                <button onClick={logout} className="logout-btn-nav" title="Logout">
-                  <LogOut size={18} />
-                </button>
+                <div className="user-dropdown-container">
+                  <button className="nav-text-link" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
+                    <User size={18} />
+                    <span className="nav-user-name">{userInfo.name.split(' ')[0]}</span>
+                  </button>
+                  <div className="user-dropdown-menu glass-panel">
+                    <Link to="/orders" className="dropdown-item">
+                      <User size={16} /> My Orders
+                    </Link>
+                    <Link to="/personalization" className="dropdown-item">
+                      <Settings size={16} /> Personalization
+                    </Link>
+                    <Link to="/workspace" className="dropdown-item">
+                      <FolderKanban size={16} /> Decision Workspace
+                    </Link>
+                    <Link to="/radar" className="dropdown-item">
+                      <Activity size={16} /> Shopping Radar
+                    </Link>
+                    {(userInfo.role === 'admin' || userInfo.role === 'Super Admin') && (
+                      <Link to="/admin" className="dropdown-item">
+                        <LayoutDashboard size={16} /> Admin Dashboard
+                      </Link>
+                    )}
+                    <button onClick={logout} className="dropdown-item text-danger">
+                      <LogOut size={16} /> Logout
+                    </button>
+                  </div>
+                </div>
               </div>
             ) : (
               <Link to="/login" className="btn btn-secondary login-nav-btn desktop-only">
@@ -199,6 +221,7 @@ const Navbar = ({ userInfo, logout, cart, wishlist, theme, toggleTheme, onSearch
               </Link>
             )}
           </nav>
+          )}
         </div>
       </header>
 

@@ -5,6 +5,8 @@ import {
   BarChart3, PackagePlus, ShoppingBag, Users, Edit3, Trash2, Plus, X, 
   CircleDollarSign, Sparkles, AlertTriangle, Database, Search, MessageSquare, CheckCircle, ShieldAlert
 } from 'lucide-react';
+import BusinessCopilot from '../components/BusinessCopilot';
+
 
 const AdminDashboard = ({ userInfo }) => {
   const navigate = useNavigate();
@@ -12,9 +14,14 @@ const AdminDashboard = ({ userInfo }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [analyticsData, setAnalyticsData] = useState(null);
+  const [revenueData, setRevenueData] = useState(null);
+  const [inventoryHealth, setInventoryHealth] = useState(null);
+  const [alerts, setAlerts] = useState([]);
+  const [anomalies, setAnomalies] = useState([]);
   const [searchIntelligenceData, setSearchIntelligenceData] = useState(null);
   const [reviewIntelligenceData, setReviewIntelligenceData] = useState(null);
   const [aiControlData, setAiControlData] = useState(null);
+  const [pendingActions, setPendingActions] = useState([]);
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
@@ -44,8 +51,24 @@ const AdminDashboard = ({ userInfo }) => {
     setError('');
     try {
       if (activeTab === 'analytics') {
-        const { data } = await api.get('/admin/analytics');
-        setAnalyticsData(data);
+        const [
+          analyticsRes, 
+          revenueRes, 
+          inventoryRes, 
+          anomaliesRes, 
+          alertsRes
+        ] = await Promise.all([
+          api.get('/admin/analytics'),
+          api.get('/admin/analytics/revenue'),
+          api.get('/admin/inventory/health'),
+          api.get('/admin/anomalies'),
+          api.get('/admin/alerts')
+        ]);
+        setAnalyticsData(analyticsRes.data);
+        setRevenueData(revenueRes.data);
+        setInventoryHealth(inventoryRes.data);
+        setAnomalies(anomaliesRes.data);
+        setAlerts(alertsRes.data);
       } else if (activeTab === 'products') {
         const { data } = await api.get('/products', { params: { limit: 100 } });
         setProducts(data.products);
@@ -64,6 +87,9 @@ const AdminDashboard = ({ userInfo }) => {
       } else if (activeTab === 'ai-control') {
         const { data } = await api.get('/admin/ai/status');
         setAiControlData(data);
+      } else if (activeTab === 'ai-approval') {
+        const { data } = await api.get('/commerce-brain/actions/pending');
+        setPendingActions(data);
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to retrieve admin details');
@@ -214,6 +240,18 @@ const AdminDashboard = ({ userInfo }) => {
         >
           <Database size={18} /> AI Control Center
         </button>
+        <button 
+          onClick={() => setActiveTab('copilot')} 
+          className={`admin-tab-btn ${activeTab === 'copilot' ? 'active' : ''}`}
+        >
+          <Sparkles size={18} /> Business Copilot
+        </button>
+        <button 
+          onClick={() => setActiveTab('ai-approval')} 
+          className={`admin-tab-btn ${activeTab === 'ai-approval' ? 'active' : ''}`}
+        >
+          <ShieldAlert size={18} /> AI Approval
+        </button>
       </div>
 
       {error && <div className="error-state glass-panel"><p>{error}</p></div>}
@@ -269,16 +307,24 @@ const AdminDashboard = ({ userInfo }) => {
                 </div>
               </div>
 
-              {/* AI Business Insights Panel */}
               <div className="ai-business-insights glass-panel" style={{ marginTop: '24px', marginBottom: '24px', padding: '24px', borderRadius: 'var(--radius-lg)', background: 'linear-gradient(135deg, rgba(var(--primary-hsl), 0.05) 0%, rgba(var(--accent), 0.05) 100%)', border: '1px solid rgba(var(--primary-hsl), 0.2)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px', color: 'var(--primary)' }}>
                   <Sparkles size={24} />
-                  <h3 style={{ margin: 0 }}>Spark AI Business Insights</h3>
+                  <h3 style={{ margin: 0 }}>Business Intelligence Insights</h3>
                 </div>
                 <ul style={{ paddingLeft: '24px', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <li><strong>Inventory Risk:</strong> 3 products are currently running low on stock. Suggest reordering 'Electronics' category.</li>
-                  <li><strong>Sales Trend:</strong> Revenue is up 12% compared to the previous period. High demand for 'Home' items.</li>
-                  <li><strong>Customer Action:</strong> 15 abandoned carts detected in the last 24h. Recommend sending a 5% discount email.</li>
+                  {anomalies.map((ano, i) => (
+                    <li key={`ano-${i}`}><strong>Anomaly Detected:</strong> {ano.message}</li>
+                  ))}
+                  {inventoryHealth && inventoryHealth.metrics.lowStock > 0 && (
+                    <li><strong>Inventory Alert:</strong> {inventoryHealth.metrics.lowStock} products are running low on stock.</li>
+                  )}
+                  {inventoryHealth && inventoryHealth.metrics.outOfStock > 0 && (
+                    <li><strong>Stockout:</strong> {inventoryHealth.metrics.outOfStock} products are currently out of stock.</li>
+                  )}
+                  {anomalies.length === 0 && (!inventoryHealth || (inventoryHealth.metrics.lowStock === 0 && inventoryHealth.metrics.outOfStock === 0)) && (
+                    <li>No urgent business alerts. Operations are nominal.</li>
+                  )}
                 </ul>
               </div>
 
@@ -591,6 +637,70 @@ const AdminDashboard = ({ userInfo }) => {
                   </div>
                 </div>
               </div>
+            </div>
+          )}
+
+          {activeTab === 'copilot' && (
+            <div className="copilot-view">
+              <BusinessCopilot />
+            </div>
+          )}
+
+          {activeTab === 'ai-approval' && (
+            <div className="ai-approval-view">
+              <h3 className="text-h3" style={{ marginBottom: '24px' }}>Pending AI Actions</h3>
+              <p className="text-muted" style={{ marginBottom: '24px' }}>Review and approve actions proposed by the autonomous Commerce Brain.</p>
+              {pendingActions.length === 0 ? (
+                <div className="glass-panel" style={{ padding: '40px', textAlign: 'center', borderRadius: 'var(--radius-lg)' }}>
+                  <ShieldAlert size={48} className="text-muted" style={{ marginBottom: '16px', opacity: 0.5 }} />
+                  <h3>No Pending Actions</h3>
+                  <p className="text-muted">The system has no autonomous actions waiting for approval.</p>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {pendingActions.map(action => (
+                    <div key={action.id} className="glass-panel" style={{ padding: '24px', borderRadius: 'var(--radius-lg)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div>
+                          <h4 style={{ margin: '0 0 4px' }}>{action.actionType}</h4>
+                          <span className="text-small text-muted">Proposed by: {action.proposedBy} • Confidence: {(action.confidence * 100).toFixed(0)}%</span>
+                        </div>
+                        <span className="badge badge-warning">Pending</span>
+                      </div>
+                      <div style={{ background: 'var(--bg)', padding: '16px', borderRadius: 'var(--radius-md)' }}>
+                        <strong>Reason:</strong> {action.reason}
+                        <div style={{ marginTop: '8px', fontFamily: 'monospace', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                          Payload: {action.payload}
+                        </div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '12px' }}>
+                        <button 
+                          className="btn btn-primary"
+                          onClick={async () => {
+                            try {
+                              await api.post(`/commerce-brain/actions/${action.id}/review`, { status: 'approved' });
+                              fetchAdminData();
+                            } catch (e) { console.error(e); }
+                          }}
+                        >
+                          Approve Action
+                        </button>
+                        <button 
+                          className="btn btn-secondary"
+                          onClick={async () => {
+                            try {
+                              await api.post(`/commerce-brain/actions/${action.id}/review`, { status: 'rejected' });
+                              fetchAdminData();
+                            } catch (e) { console.error(e); }
+                          }}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 

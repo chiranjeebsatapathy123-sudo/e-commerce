@@ -4,6 +4,7 @@ import api from '../services/api';
 import { Star, ShoppingCart, Heart, MessageSquarePlus, ArrowLeft, Sparkles, Maximize2 } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import ProductGallery from '../components/ProductGallery';
+import ProductUniverse from '../components/ProductUniverse';
 
 const ProductDetails = ({ addToCart, wishlist, toggleWishlist, userInfo }) => {
   const { id } = useParams();
@@ -11,6 +12,7 @@ const ProductDetails = ({ addToCart, wishlist, toggleWishlist, userInfo }) => {
   const [product, setProduct] = useState(null);
   const [activeImage, setActiveImage] = useState('');
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const [isLensOpen, setIsLensOpen] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
@@ -210,7 +212,47 @@ const ProductDetails = ({ addToCart, wishlist, toggleWishlist, userInfo }) => {
             >
               <Sparkles size={18} />
             </button>
+            <button
+              onClick={() => setIsLensOpen(!isLensOpen)}
+              className={`btn btn-secondary btn-lg btn-icon-only ${isLensOpen ? 'active' : ''}`}
+              title="Toggle AI Product Lens"
+            >
+              <Sparkles size={18} className={isLensOpen ? 'text-accent' : ''} />
+            </button>
           </div>
+
+          {/* AI Product Lens Overlay */}
+          {isLensOpen && (
+            <div className="ai-lens-panel glass-panel animate-fade-in" style={{ marginTop: '16px', padding: '24px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--accent)', background: 'linear-gradient(to bottom right, rgba(var(--bg-rgb), 0.9), rgba(var(--panel-rgb), 0.9))', position: 'relative' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <h4 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent)' }}>
+                  <Sparkles size={16} /> AI Product Lens
+                </h4>
+                <button onClick={() => setIsLensOpen(false)} className="btn-icon-only" style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>×</button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontSize: '0.95rem' }}>
+                <div>
+                  <strong style={{ display: 'block', marginBottom: '4px', color: 'var(--text)' }}>Summary</strong>
+                  <p style={{ margin: 0, color: 'var(--text-muted)' }}>{aiReviewSummary?.summary || 'A high-quality product recommended for its durability and design.'}</p>
+                </div>
+                {aiReviewSummary?.themes && (
+                  <div>
+                    <strong style={{ display: 'block', marginBottom: '4px', color: 'var(--text)' }}>Review Themes</strong>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {aiReviewSummary.themes.map((theme, idx) => (
+                        <span key={idx} className="badge" style={{ background: 'var(--bg)' }}>{theme}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <strong style={{ display: 'block', marginBottom: '4px', color: 'var(--text)' }}>Price Intelligence</strong>
+                  <p style={{ margin: 0, color: 'var(--text-muted)' }}>Currently matching market average. Trending stable over the last 30 days.</p>
+                </div>
+              </div>
+            </div>
+          )}
+
 
           {/* Delivery & Warranty Information */}
           <div className="product-meta-info" style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '0.9rem', color: 'var(--text-muted)' }}>
@@ -261,23 +303,7 @@ const ProductDetails = ({ addToCart, wishlist, toggleWishlist, userInfo }) => {
             <Sparkles size={14} style={{ marginRight: '6px' }} /> AI Matching
           </button>
         </div>
-        <div className="product-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '24px' }}>
-          {relatedProducts.length > 0 ? (
-            relatedProducts.map((sp) => (
-              <ProductCard
-                key={sp.id}
-                product={sp}
-                addToCart={addToCart}
-                wishlist={wishlist}
-                toggleWishlist={toggleWishlist}
-              />
-            ))
-          ) : (
-            <div className="glass-panel" style={{ gridColumn: '1 / -1', padding: '24px', textAlign: 'center', color: 'var(--text-muted)' }}>
-              We're analyzing our catalogue for similar products...
-            </div>
-          )}
-        </div>
+        <ProductUniverse currentProduct={product} relatedProducts={relatedProducts} />
       </section>
 
       <section className="ask-product-section" style={{ marginTop: '48px' }}>

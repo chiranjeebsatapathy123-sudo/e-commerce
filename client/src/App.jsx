@@ -12,7 +12,10 @@ import Orders from './pages/Orders';
 import AdminDashboard from './pages/AdminDashboard';
 import AiCopilot from './pages/AiCopilot';
 import Compare from './pages/Compare';
-import PremiumBackground from './components/PremiumBackground';
+import PersonalizationCenter from './pages/PersonalizationCenter';
+import DecisionWorkspace from './pages/DecisionWorkspace';
+import ShoppingRadar from './pages/ShoppingRadar';
+import BackgroundEngine from './components/background/BackgroundEngine';
 import SparkAIFab from './components/SparkAIFab';
 import CommandPalette from './components/CommandPalette';
 import { ToastProvider } from './components/ToastProvider';
@@ -115,7 +118,7 @@ function App() {
   return (
     <ToastProvider>
       <Router>
-        <PremiumBackground />
+        <BackgroundEngine theme={theme} />
       <div className="app-layout">
         <Navbar
           userInfo={userInfo}
@@ -212,6 +215,9 @@ function App() {
                 />
               }
             />
+            <Route path="/personalization" element={<PersonalizationCenter userInfo={userInfo} />} />
+            <Route path="/workspace" element={<DecisionWorkspace userInfo={userInfo} addToCart={addToCart} />} />
+            <Route path="/radar" element={<ShoppingRadar userInfo={userInfo} />} />
           </Routes>
         </main>
         <Footer />

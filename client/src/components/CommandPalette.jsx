@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, ShoppingCart, Heart, User, Sparkles, LayoutDashboard, Home, X } from 'lucide-react';
+import { Search, ShoppingCart, Heart, User, Sparkles, LayoutDashboard, Home, X, Settings, Activity, FolderKanban } from 'lucide-react';
 
 const CommandPalette = ({ isOpen, onClose, userInfo }) => {
   const [query, setQuery] = useState('');
@@ -28,6 +28,9 @@ const CommandPalette = ({ isOpen, onClose, userInfo }) => {
     { id: 'wishlist', name: 'Open Wishlist', icon: <Heart size={16}/>, action: () => navigate('/wishlist') },
     { id: 'orders', name: 'View Orders', icon: <User size={16}/>, action: () => navigate('/orders') },
     { id: 'ai', name: 'Ask Spark AI', icon: <Sparkles size={16}/>, action: () => navigate('/ai') },
+    { id: 'personalization', name: 'Personalization Center', icon: <Settings size={16}/>, action: () => navigate('/personalization') },
+    { id: 'workspace', name: 'Decision Workspace', icon: <FolderKanban size={16}/>, action: () => navigate('/workspace') },
+    { id: 'radar', name: 'Shopping Radar', icon: <Activity size={16}/>, action: () => navigate('/radar') },
   ];
 
   if (userInfo && (userInfo.role === 'admin' || userInfo.role === 'Super Admin')) {

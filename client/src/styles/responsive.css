@@ -1,0 +1,35 @@
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+/* Hide on Mobile */
+@media (max-width: 767px) {
+  .hidden-mobile {
+    display: none !important;
+  }
+}
+
+/* Hide on Tablet and below */
+@media (max-width: 1023px) {
+  .hidden-tablet {
+    display: none !important;
+  }
+}
+
+/* Hide on Desktop */
+@media (min-width: 1024px) {
+  .hidden-desktop {
+    display: none !important;
+  }
+}
+
+/* Mobile Layout Adjustments */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .desktop-only {
+    display: none !important;
+  }
+}

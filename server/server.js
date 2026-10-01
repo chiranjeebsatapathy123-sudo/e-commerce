@@ -26,6 +26,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const searchRoutes = require('./routes/searchRoutes');
+const commerceBrainRoutes = require('./routes/commerceBrainRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -35,6 +36,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/commerce-brain', commerceBrainRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'E-Commerce API is running smoothly' });

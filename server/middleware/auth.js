@@ -34,6 +34,23 @@ const protect = async (req, res, next) => {
   }
 };
 
+const optionalAuth = async (req, res, next) => {
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    try {
+      const token = req.headers.authorization.split(' ')[1];
+      if (token && process.env.JWT_SECRET) {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = await User.findByPk(decoded.id, {
+          attributes: { exclude: ['password'] }
+        });
+      }
+    } catch (error) {
+      // ignore
+    }
+  }
+  return next();
+};
+
 const ROLE_PERMISSIONS = {
   CUSTOMER: [],
   SUPPORT_AGENT: ['orders.read', 'products.read', 'users.read'],
@@ -63,4 +80,4 @@ const requirePermission = (permission) => {
   };
 };
 
-module.exports = { protect, requirePermission, ROLE_PERMISSIONS };
+module.exports = { protect, optionalAuth, requirePermission, ROLE_PERMISSIONS };
