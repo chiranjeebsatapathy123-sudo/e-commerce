@@ -3,7 +3,7 @@ version: '3.8'
 services:
   server:
     build:
-      context: ./server
+      context: ./backend
     ports:
       - "5000:5000"
     environment:
@@ -12,7 +12,7 @@ services:
       - DB_STORAGE=./data/database.sqlite
       # Add other env vars here (e.g. STRIPE_SECRET_KEY, OPENAI_API_KEY)
     volumes:
-      - ./server:/app
+      - ./backend:/app
       - /app/node_modules
     depends_on:
       - redis
@@ -21,13 +21,13 @@ services:
 
   client:
     build:
-      context: ./client
+      context: ./frontend
     ports:
       - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:5000
     volumes:
-      - ./client:/app
+      - ./frontend:/app
       - /app/node_modules
     networks:
       - ecommerce_network
