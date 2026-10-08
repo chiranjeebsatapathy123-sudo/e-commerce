@@ -24,6 +24,12 @@ import GroupBuy from './pages/GroupBuy';
 import Auctions from './pages/Auctions';
 import MysteryBox from './pages/MysteryBox';
 import Wallet from './pages/Wallet';
+import RewardsHub from './pages/RewardsHub';
+import EcoHub from './pages/EcoHub';
+import WholesaleB2B from './pages/WholesaleB2B';
+import Subscriptions from './pages/Subscriptions';
+import VirtualTryOn from './pages/VirtualTryOn';
+import GiftCards from './pages/GiftCards';
 import BackgroundEngine from './components/background/BackgroundEngine';
 import SparkAIFab from './components/SparkAIFab';
 import CommandPalette from './components/CommandPalette';
@@ -266,6 +272,12 @@ function App() {
             <Route path="/auctions" element={<Auctions userInfo={userInfo} />} />
             <Route path="/mystery-box" element={<MysteryBox userInfo={userInfo} />} />
             <Route path="/wallet" element={<Wallet userInfo={userInfo} />} />
+            <Route path="/rewards" element={<RewardsHub userInfo={userInfo} />} />
+            <Route path="/eco" element={<EcoHub userInfo={userInfo} />} />
+            <Route path="/wholesale" element={<WholesaleB2B userInfo={userInfo} />} />
+            <Route path="/subscriptions" element={<Subscriptions userInfo={userInfo} />} />
+            <Route path="/virtual-try-on" element={<VirtualTryOn />} />
+            <Route path="/gift-cards" element={<GiftCards userInfo={userInfo} />} />
           </Routes>
         </main>
         <Footer />

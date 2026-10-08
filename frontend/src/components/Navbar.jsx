@@ -169,6 +169,8 @@ const Navbar = ({ userInfo, logout, cart, wishlist, theme, toggleTheme, onSearch
                     <ul className="text-[13px] space-y-2 text-gray-600">
                       <li><Link to="/orders" className="hover:text-[#e47911] hover:underline">Your Orders</Link></li>
                       <li><Link to="/wallet" className="hover:text-[#e47911] hover:underline text-indigo-600 font-bold flex items-center gap-1">Spark Wallet</Link></li>
+                      <li><Link to="/rewards" className="hover:text-[#e47911] hover:underline text-yellow-600 font-bold flex items-center gap-1">Rewards Hub</Link></li>
+                      <li><Link to="/subscriptions" className="hover:text-[#e47911] hover:underline text-rose-600 font-bold flex items-center gap-1">Subscriptions</Link></li>
                       <li><Link to="/radar" className="hover:text-[#e47911] hover:underline">Shopping Radar</Link></li>
                       <li><Link to="/workspace" className="hover:text-[#e47911] hover:underline">Decision Workspace</Link></li>
                       {userInfo?.role === 'admin' && (
@@ -210,9 +212,13 @@ const Navbar = ({ userInfo, logout, cart, wishlist, theme, toggleTheme, onSearch
             <Link to="/live" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-red-400 font-bold">Live Commerce</Link>
             <Link to="/auctions" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-indigo-400 font-bold">Auctions</Link>
             <Link to="/mystery-box" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-emerald-400 font-bold">Mystery Boxes</Link>
+            <Link to="/eco" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-green-400 font-bold">Eco Hub</Link>
+            <Link to="/wholesale" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-blue-400 font-bold">B2B Wholesale</Link>
+            <Link to="/gift-cards" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-pink-400 font-bold">Gift Cards</Link>
             <Link to="/group-buy" className="hover:border hover:border-white border border-transparent p-1 rounded-sm">Group Buy</Link>
             <Link to="/social" className="hover:border hover:border-white border border-transparent p-1 rounded-sm">Social Feed</Link>
             <Link to="/spatial" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-fuchsia-400 font-bold">3D Spatial</Link>
+            <Link to="/virtual-try-on" className="hover:border hover:border-white border border-transparent p-1 rounded-sm text-cyan-400 font-bold">AR Try-On</Link>
           </div>
         </div>
       </header>
