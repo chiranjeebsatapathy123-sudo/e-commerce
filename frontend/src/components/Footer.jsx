@@ -1,105 +1,98 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Store, HelpCircle, Gift, CreditCard, ShieldCheck, Sparkles } from 'lucide-react';
+import { Store, HelpCircle, Gift, CreditCard, ShieldCheck, Sparkles, ArrowRight } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#172337] pt-12 pb-6 mt-16 text-gray-300 text-sm font-sans">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-10 pb-10 border-b border-white/10">
-          
-          <div className="lg:col-span-1">
-            <h4 className="text-gray-400 font-semibold mb-4 text-xs uppercase tracking-wider">About</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Contact Us</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Careers</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">SparkCart Stories</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Press</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Corporate Information</a></li>
-            </ul>
-          </div>
-          
-          <div className="lg:col-span-1">
-            <h4 className="text-gray-400 font-semibold mb-4 text-xs uppercase tracking-wider">Help</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Payments</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Shipping</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Cancellation & Returns</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">FAQ</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Report Infringement</a></li>
-            </ul>
-          </div>
+    <footer className="bg-[#050505] pt-24 pb-12 mt-16 text-gray-400 text-sm font-sans border-t border-white/5 relative overflow-hidden">
+      
+      {/* Background glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-1/2 bg-indigo-900/10 rounded-full blur-[120px] pointer-events-none"></div>
 
-          <div className="lg:col-span-1">
-            <h4 className="text-gray-400 font-semibold mb-4 text-xs uppercase tracking-wider">Consumer Policy</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Cancellation & Returns</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Terms Of Use</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Security</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Privacy</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Sitemap</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Grievance Redressal</a></li>
-            </ul>
-          </div>
-
-          <div className="lg:col-span-1 border-r-0 lg:border-r lg:border-white/10 pr-4">
-            <h4 className="text-gray-400 font-semibold mb-4 text-xs uppercase tracking-wider">Social</h4>
-            <ul className="space-y-2">
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Facebook</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">Twitter</a></li>
-              <li><a href="#" className="hover:text-white hover:underline transition-colors">YouTube</a></li>
-            </ul>
-          </div>
-
-          <div className="lg:col-span-1 pl-0 lg:pl-4">
-            <h4 className="text-gray-400 font-semibold mb-4 text-xs uppercase tracking-wider">Mail Us:</h4>
-            <div className="text-xs space-y-1 leading-relaxed">
-              <p>SparkCart Internet Private Limited,</p>
-              <p>Buildings Alyssa, Begonia &</p>
-              <p>Clove Embassy Tech Village,</p>
-              <p>Outer Ring Road, Devarabeesanahalli Village,</p>
-              <p>Bengaluru, 560103,</p>
-              <p>Karnataka, India</p>
+      <div className="max-w-[1600px] mx-auto px-6 relative z-10">
+        
+        {/* Brand Newsletter area */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-20 pb-20 border-b border-white/5">
+          <div>
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-2xl font-black tracking-tight text-white">SparkCart</span>
             </div>
+            <p className="text-lg">The world's most advanced shopping experience.</p>
+          </div>
+          <div className="w-full md:w-auto flex flex-col md:flex-row gap-3">
+            <input type="email" placeholder="Enter your email" className="bg-white/5 border border-white/10 px-6 py-4 rounded-xl focus:outline-none focus:border-indigo-500/50 w-full md:w-80 text-white font-medium" />
+            <button className="bg-white text-black font-black px-8 py-4 rounded-xl hover:bg-gray-200 transition-colors flex items-center justify-center gap-2">
+              Subscribe <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16">
+          
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="text-white font-bold mb-6 text-xs uppercase tracking-widest">Company</h4>
+            <ul className="space-y-4 font-medium">
+              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Careers</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Investors</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Press & Media</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Sustainability</a></li>
+            </ul>
+          </div>
+          
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="text-white font-bold mb-6 text-xs uppercase tracking-widest">Support</h4>
+            <ul className="space-y-4 font-medium">
+              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Track Order</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Returns & Refunds</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Shipping Info</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
+            </ul>
           </div>
 
-          <div className="lg:col-span-1">
-            <h4 className="text-gray-400 font-semibold mb-4 text-xs uppercase tracking-wider">Registered Office Address:</h4>
-            <div className="text-xs space-y-1 leading-relaxed">
-              <p>SparkCart Internet Private Limited,</p>
-              <p>Buildings Alyssa, Begonia &</p>
-              <p>Clove Embassy Tech Village,</p>
-              <p>Outer Ring Road, Devarabeesanahalli Village,</p>
-              <p>Bengaluru, 560103,</p>
-              <p>Karnataka, India</p>
-              <p>CIN : U51109KA2012PTC066107</p>
-              <p>Telephone: <a href="tel:044-45614700" className="text-blue-400">044-45614700</a></p>
+          <div className="col-span-2 md:col-span-1">
+            <h4 className="text-white font-bold mb-6 text-xs uppercase tracking-widest">Legal</h4>
+            <ul className="space-y-4 font-medium">
+              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Cookie Policy</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Accessibility</a></li>
+            </ul>
+          </div>
+
+          <div className="col-span-2 md:col-span-2">
+            <h4 className="text-white font-bold mb-6 text-xs uppercase tracking-widest">Headquarters</h4>
+            <div className="text-gray-400 space-y-2 leading-relaxed font-medium">
+              <p>SparkCart Global Inc.</p>
+              <p>One Infinite Commerce Loop</p>
+              <p>Silicon Valley, CA 94025</p>
+              <p>United States</p>
+              <p className="mt-4"><a href="mailto:hello@sparkcart.com" className="text-indigo-400 hover:text-indigo-300">hello@sparkcart.com</a></p>
             </div>
           </div>
           
         </div>
 
         {/* Bottom Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-6 pt-4 text-sm font-semibold text-white">
-          <div className="flex items-center gap-2 hover:text-blue-400 cursor-pointer transition-colors">
-            <Store className="text-yellow-400 w-4 h-4" /> Become a Seller
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-8 border-t border-white/5 text-xs font-bold uppercase tracking-widest">
+          <div className="flex flex-wrap justify-center gap-6 text-gray-500">
+            <div className="flex items-center gap-2 hover:text-white cursor-pointer transition-colors">
+              <Store size={14} /> Sell on SparkCart
+            </div>
+            <div className="flex items-center gap-2 hover:text-white cursor-pointer transition-colors">
+              <Gift size={14} /> Gift Cards
+            </div>
+            <div className="flex items-center gap-2 hover:text-white cursor-pointer transition-colors">
+              <HelpCircle size={14} /> Support
+            </div>
           </div>
-          <div className="flex items-center gap-2 hover:text-blue-400 cursor-pointer transition-colors">
-            <Sparkles className="text-yellow-400 w-4 h-4" /> Advertise
-          </div>
-          <div className="flex items-center gap-2 hover:text-blue-400 cursor-pointer transition-colors">
-            <Gift className="text-yellow-400 w-4 h-4" /> Gift Cards
-          </div>
-          <div className="flex items-center gap-2 hover:text-blue-400 cursor-pointer transition-colors">
-            <HelpCircle className="text-yellow-400 w-4 h-4" /> Help Center
-          </div>
-          <div className="text-gray-400 font-normal">
-            &copy; 2007-{new Date().getFullYear()} SparkCart.com
-          </div>
-          <div className="flex items-center gap-3">
-            <CreditCard className="w-8 h-6 text-gray-400" />
-            <ShieldCheck className="w-8 h-6 text-gray-400" />
+          
+          <div className="text-gray-600">
+            &copy; {new Date().getFullYear()} SparkCart Global. All Rights Reserved.
           </div>
         </div>
       </div>
